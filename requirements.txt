@@ -1,0 +1,16 @@
+tqdm
+requests
+pep8
+python-dotenv
+pymongo
+pytest
+celery
+gunicorn
+flask
+flask-pymongo
+flask-apscheduler
+flask-mail
+flask-login
+flask-wtf
+flask-debugtoolbar
+.

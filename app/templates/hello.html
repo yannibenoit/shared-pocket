@@ -1,0 +1,7 @@
+{% extends 'index.html' %}
+
+{% block title %}Hello {{ name }}{% endblock %}
+
+{% block content %}<h1>Hello {{ name|capitalize }}! <br> Welcome to the shared pocket, <br> You have {{ content_size}} articles saved on Pocket </h1>
+
+{% endblock %}
