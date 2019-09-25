@@ -13,4 +13,3 @@ flask-mail
 flask-login
 flask-wtf
 flask-debugtoolbar
-.

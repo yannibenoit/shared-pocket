@@ -1,0 +1,37 @@
+version: "3.5"
+services:
+  back:
+    build: ./app/
+    restart: always
+    environment:
+      CONSUMER_KEY: ${CONSUMER_KEY}
+      REDIRECT_URI: ${REDIRECT_URI}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+
+    network_mode: host
+    ports:
+      - 5000:5000
+
+    depends_on:
+      - db
+
+  db:
+    build: ./db/
+    restart: always
+    environment:
+      DB_ADMIN_USER: ${DB_ADMIN_USER}
+      DB_ADMIN_PASSWORD: ${DB_ADMIN_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+    network_mode: host
+    ports:
+      - 27017:27017
+
+
+

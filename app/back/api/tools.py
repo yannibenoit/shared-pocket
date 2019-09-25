@@ -1,9 +1,10 @@
 from itertools import chain, starmap
 
+
 class Tool:
+
     def __init__(self):
         self.variable = ''
-
 
     def flatten_json_iterative_solution(self, dictionary):
         """Flatten a nested json file"""
@@ -24,7 +25,6 @@ class Tool:
                     yield temp2, value
             else:
                 yield parent_key, parent_value
-
 
         # Keep iterating until the termination condition is satisfied
         while True:
