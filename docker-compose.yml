@@ -11,8 +11,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
-
-    network_mode: host
     ports:
       - 5000:5000
 
@@ -29,7 +27,6 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
 
-    network_mode: host
     ports:
       - 27017:27017
 
