@@ -1,7 +1,17 @@
 {% extends 'index.html' %}
 
-{% block title %}Hello {{ name }}{% endblock %}
+{% block title %}Hello{{ name }}{% endblock %}
 
-{% block content %}<h1>Hello {{ name|capitalize }}! <br> Welcome to the shared pocket, <br> You have {{ content_size}} articles saved on Pocket </h1>
+{% block content %}
+    <h1>Hello {{name|capitalize}}!</h1>
+   <p>
+    <br> Welcome to the shared pocket,
+    <br> You have {{content_size}} articles saved on Pocket </p>
+    <p>
 
+   {% for item_id in articles %}
+          <p>id: {{ item_id }}</p>
+{% endfor %}
+
+ </p>
 {% endblock %}

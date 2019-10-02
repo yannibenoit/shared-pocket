@@ -1,25 +1,20 @@
 from flask import Flask, render_template, request, redirect, session
 from back.api.pocket import Pocket
 from back.database.database import MongoDB
-import string
-import random
-
-
-def random_string(string_length=10):
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(string_length))
-
-
-pocket = Pocket()
-db = MongoDB()
+from back.modules.user import User
+from back.modules.articles import Articles
+import os
+import binascii
 
 app = Flask(__name__)
-app.secret_key = random_string(20)
+pocket = Pocket()
+user = User()
+article = Articles()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    return render_template("homepage.html")
+    return render_template("index.html")
 
 
 @app.route('/auth_pocket', methods=['GET', 'POST'])
@@ -32,19 +27,27 @@ def auth_pocket():
 
 
 @app.route('/get_token')
-def get_token(name='user'):
+def get_session_token():
+    session_id = str(binascii.hexlify(os.urandom(12)))
+    return redirect(f'/get_token/{session_id}')
+
+
+@app.route('/get_token/<session_id>')
+def get_token(session_id):
     try:
-        #db.delete_all_documents('users')
         data = pocket.get_user_access_token()
         if data:
-            name = data.get('username', '')
+            name = data.get('username', '').lower()
             access_token = data.get('access_token', '')
-            user_id = db.insert('users', {'username': name,'access_token': access_token})
             session['pocket_username'] = name
-            session['pocket_user_id'] = str(user_id)
-            db.create_index('username', 'users')
 
-            return redirect(f'/data/user/{user_id}')
+            if not user.get_user(name):
+                user_data = {'username': name, 'access_token': access_token}
+                user_id = user.create_user(user_data)
+                session['pocket_user_id'] = str(user_id)
+                user.create_user_index()
+
+            return redirect(f'/data/user/{name}')
         else:
             return render_template('index.html')
     except Exception as e:
@@ -53,28 +56,30 @@ def get_token(name='user'):
     return render_template('index.html')
 
 
-@app.route('/data/user/<user_id>')
-def get_content(user_id):
+@app.route('/data/user/<name>')
+def get_content(name):
     data_ = pocket.get_user_content()
     size = len(data_['content'])
     username = session['pocket_username']
+    articles = article.get_articles()
+    articles_ids = [item['item_id'] for item in articles]
     try:
-        db.delete_all_documents('articles')
         for d in data_['content']:
-            print(d)
-            d.update({'user_id': session['pocket_user_id']})
-            print(db.insert('articles', d))
-
-        db.create_index('item_id', 'articles')
-    except Exception as e :
+            if d['item_id'] not in articles_ids:
+                print(d)
+                d.update({'user_id': user.get_user(username)['_id']})
+                article.create_article(d)
+                article.create_article_index()
+    except Exception as e:
         print(e)
     if data_:
-        return render_template('hello.html', name=username, content_size=size)
+        return render_template('hello.html', name=username, content_size=size, articles=[item['given_title'] for item in articles])
     else:
         return render_template('index.html')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.secret_key = os.urandom(12)
+    app.run(host='0.0.0.0', debug=True, port=5000)
 
 

@@ -4,13 +4,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-#env_path = Path('../..') / '.env'
-#load_dotenv(env_path)
-
 CONSUMER_KEY = os.getenv("CONSUMER_KEY")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
-print(f'{CONSUMER_KEY}, {REDIRECT_URI}')
-
 
 class Pocket:
 
@@ -45,7 +40,6 @@ class Pocket:
             r = req.post(url, params={'consumer_key': self.consumer_key, 'code': request_token},
                          headers={'Content-Type': 'application/json', 'X-Accept': 'application/json'}
                          )
-            print(r.text)
             try:
                 self.user_data = r.json()
             except Exception as e:

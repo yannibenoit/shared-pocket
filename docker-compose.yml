@@ -2,7 +2,7 @@ version: "3.5"
 services:
   back:
     build: ./app/
-    restart: always
+    #restart: always
     environment:
       CONSUMER_KEY: ${CONSUMER_KEY}
       REDIRECT_URI: ${REDIRECT_URI}
@@ -19,7 +19,7 @@ services:
 
   db:
     build: ./db/
-    restart: always
+    #restart: always
     environment:
       DB_ADMIN_USER: ${DB_ADMIN_USER}
       DB_ADMIN_PASSWORD: ${DB_ADMIN_PASSWORD}
@@ -29,6 +29,17 @@ services:
 
     ports:
       - 27017:27017
+networks:
+  default:
 
-
-
+volumes:
+  db_data:
+    driver_opts:
+      type: none
+      device: ${PWD}/${DB_DATA_PATH}
+      o: bind
+  back_data:
+    driver_opts:
+      type: none
+      device: ${PWD}/${BACK_DATA_PATH}
+      o: bind

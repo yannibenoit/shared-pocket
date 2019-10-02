@@ -1,20 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
-
-body {
-    background-color: #c7c7c7;
-    font-family: Lato;
-}
-
 h1 {
-    width: 70%;
-    margin: auto;
-    background-color: #fff;
-    text-align: center;
-    padding-top: 50px;
-    padding-bottom: 50px;
+  margin: 1em 0;
 }
 
-input[type="submit"] {
-    display: block;
-    margin: 0 auto;
+footer {
+  padding-top: 2em;
 }
