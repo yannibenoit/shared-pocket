@@ -9,6 +9,7 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 class Pocket:
 
+
     def __init__(self):
         self.consumer_key = CONSUMER_KEY
         self.redirect_uri = REDIRECT_URI

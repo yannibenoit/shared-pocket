@@ -5,11 +5,20 @@ from back.modules.user import User
 from back.modules.articles import Articles
 import os
 import binascii
+import datetime
 
 app = Flask(__name__)
 pocket = Pocket()
 user = User()
 article = Articles()
+
+
+
+def format_timestamps(value):
+    return datetime.datetime.fromtimestamp(int(value)).isoformat()
+
+
+app.jinja_env.filters['datetime'] = format_timestamps
 
 
 @app.route('/')
@@ -73,7 +82,7 @@ def get_content(name):
     except Exception as e:
         print(e)
     if data_:
-        return render_template('hello.html', name=username, content_size=size, articles=[item['given_title'] for item in articles])
+        return render_template('hello.html', name=username, content_size=size, articles=sorted(articles, key=lambda i: i['time_added'],reverse=True))
     else:
         return render_template('index.html')
 

@@ -1,17 +1,28 @@
 {% extends 'index.html' %}
 
-{% block title %}Hello{{ name }}{% endblock %}
+{% block title %} Hello {{ name }}{% endblock %}
 
 {% block content %}
-    <h1>Hello {{name|capitalize}}!</h1>
+    <h1>Hello {{name}}!</h1>
    <p>
     <br> Welcome to the shared pocket,
     <br> You have {{content_size}} articles saved on Pocket </p>
     <p>
-
+<div class="articles">
+<div class="row">
    {% for item_id in articles %}
-          <p>id: {{ item_id }}</p>
-{% endfor %}
-
+    <div class = "card-deck">
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{item_id.resolved_title}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted"> {{ item_id.time_added|datetime }}</h6>
+        <p class="card-text">{{item_id.excerpt}}</p>
+        <a href={{item_id.given_url}} class="card-link">See more</a>
+      </div>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
  </p>
 {% endblock %}
